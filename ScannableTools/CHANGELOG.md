@@ -1,0 +1,20 @@
+# ScannableTools Mod
+
+## 1.0.5<br>
+\+ Added License<br>
+\# Project is now Open Source<br>
+
+## 1.0.4<br>
+\+ Added config to change how the key scan node behaves<br>
+
+## 1.0.3<br>
+\* Fixed categories (No actual mod changes)<br>
+
+## 1.0.2<br>
+\* Fixed performance issues<br>
+
+## 1.0.1<br>
+\* Fixed held tools being scannable<br>
+
+## 1.0.0:<br>
+\+ Initial Release<br>

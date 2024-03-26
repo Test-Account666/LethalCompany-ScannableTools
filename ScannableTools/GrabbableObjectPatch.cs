@@ -38,6 +38,14 @@ public static class GrabbableObjectPatch {
         if (grabbableObject.isHeld)
             return;
 
+        if (ScannableTools.scanToolsConfig.blacklistedItemsList.Contains(
+                grabbableObject.itemProperties.itemName.ToLower()))
+            return;
+
+        if (ScannableTools.scanToolsConfig.blacklistedItemsRegex is not null)
+            if (ScannableTools.scanToolsConfig.blacklistedItemsRegex.IsMatch(grabbableObject.itemProperties.itemName))
+                return;
+
         if (grabbableObject.itemProperties.itemName.Equals("Key") &&
             ScannableTools.scanToolsConfig.keyScanNodeType.Value == 0) {
             var scanNode = grabbableObject.gameObject.GetComponentInChildren<ScanNodeProperties>();

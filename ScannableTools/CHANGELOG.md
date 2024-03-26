@@ -1,5 +1,8 @@
 # ScannableTools Mod
 
+## 1.1.0<br>
+\+ Added item black list
+
 ## 1.0.5<br>
 \+ Added License<br>
 \# Project is now Open Source<br>

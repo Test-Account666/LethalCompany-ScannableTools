@@ -5,7 +5,7 @@
         <AssemblyName>TestAccount666.ScannableTools</AssemblyName>
         <Product>ScannableTools</Product>
         <!-- Change to whatever version you're currently on. -->
-        <Version>1.0.5</Version>
+        <Version>1.1.0</Version>
         <Description>This mod allows you to scan tools, which are normally not scannable.</Description>
         <Source>https://github.com/TheBlackEntity/LethalCompany-ScannableTools</Source>
     </PropertyGroup>

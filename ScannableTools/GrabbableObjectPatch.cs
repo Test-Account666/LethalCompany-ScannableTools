@@ -7,72 +7,60 @@ namespace ScannableTools;
 public static class GrabbableObjectPatch {
     [HarmonyPatch(typeof(GrabbableObject), "Start")]
     [HarmonyPostfix]
-    public static void AddScanNodeToCompanyIssuedItems(GrabbableObject __instance) {
-        HandleGrabbableObject(__instance);
-    }
+    // ReSharper disable once InconsistentNaming
+    public static void AddScanNodeToCompanyIssuedItems(GrabbableObject __instance) => HandleGrabbableObject(__instance);
 
     [HarmonyPatch(typeof(GrabbableObject), "LateUpdate")]
     [HarmonyPostfix]
-    public static void UpdateScanNodeOfCompanyIssuedItems(GrabbableObject __instance) {
-        UpdateGrabbableObject(__instance);
-    }
+    // ReSharper disable once InconsistentNaming
+    public static void UpdateScanNodeOfCompanyIssuedItems(GrabbableObject __instance) => UpdateGrabbableObject(__instance);
 
     [HarmonyPatch(typeof(BoomboxItem), "Update")]
     [HarmonyPostfix]
-    public static void UpdateScanNodeOfCompanyIssuedItems(BoomboxItem __instance) {
-        UpdateGrabbableObject(__instance);
-    }
+    // ReSharper disable once InconsistentNaming
+    public static void UpdateScanNodeOfCompanyIssuedItems(BoomboxItem __instance) => UpdateGrabbableObject(__instance);
 
     internal static void HandleGrabbableObject(GrabbableObject grabbableObject) {
-        if (grabbableObject == null)
-            return;
+        if (grabbableObject == null) return;
 
-        if (grabbableObject.itemProperties.isScrap)
-            return;
+        if (grabbableObject.itemProperties.isScrap) return;
 
         var scanNodeContainer = grabbableObject.gameObject.GetComponent<ScanNodeContainer>();
 
-        if (scanNodeContainer != null)
-            return;
+        if (scanNodeContainer != null) return;
 
-        if (grabbableObject.isHeld)
-            return;
+        if (grabbableObject.isHeld) return;
 
-        if (ScannableTools.scanToolsConfig.blacklistedItemsList.Contains(
-                grabbableObject.itemProperties.itemName.ToLower()))
-            return;
+        if (ScannableTools.ScanToolsConfig.blacklistedItemsList.Contains(grabbableObject.itemProperties.itemName.ToLower())) return;
 
-        if (ScannableTools.scanToolsConfig.blacklistedItemsRegex is not null)
-            if (ScannableTools.scanToolsConfig.blacklistedItemsRegex.IsMatch(grabbableObject.itemProperties.itemName))
+        if (ScannableTools.ScanToolsConfig.blacklistedItemsRegex is not null)
+            if (ScannableTools.ScanToolsConfig.blacklistedItemsRegex.IsMatch(grabbableObject.itemProperties.itemName))
                 return;
 
         if (grabbableObject.itemProperties.itemName.Equals("Key") &&
-            ScannableTools.scanToolsConfig.keyScanNodeType.Value == 0) {
+            ScannableTools.ScanToolsConfig.keyScanNodeType.Value == 0) {
             var scanNode = grabbableObject.gameObject.GetComponentInChildren<ScanNodeProperties>();
             if (scanNode != null) {
                 scanNodeContainer = grabbableObject.gameObject.AddComponent<ScanNodeContainer>();
                 scanNodeContainer.scanNodeGameObject = scanNode.gameObject;
-                scanNodeContainer.ScanNode = scanNode;
+                scanNodeContainer.scanNode = scanNode;
                 return;
             }
         }
 
         CreateScanNodeOnObject(grabbableObject.gameObject, grabbableObject.itemProperties.itemName,
-            GetBatteryPercentage(grabbableObject));
+                               GetBatteryPercentage(grabbableObject));
     }
 
     internal static void UpdateGrabbableObject(GrabbableObject grabbableObject) {
-        if (grabbableObject == null)
-            return;
+        if (grabbableObject == null) return;
 
-        if (grabbableObject.itemProperties.isScrap)
-            return;
+        if (grabbableObject.itemProperties.isScrap) return;
 
         var scanNodeContainer = grabbableObject.gameObject.GetComponent<ScanNodeContainer>();
 
-        if (scanNodeContainer == null || scanNodeContainer.ScanNode == null) {
-            if (!grabbableObject.isHeld)
-                HandleGrabbableObject(grabbableObject);
+        if (scanNodeContainer == null || scanNodeContainer.scanNode == null) {
+            if (!grabbableObject.isHeld) HandleGrabbableObject(grabbableObject);
             return;
         }
 
@@ -82,22 +70,19 @@ public static class GrabbableObjectPatch {
             return;
         }
 
-        if (!grabbableObject.itemProperties.requiresBattery)
-            return;
+        if (!grabbableObject.itemProperties.requiresBattery) return;
 
         var batteryPercentage = GetBatteryPercentage(grabbableObject);
 
-        if (batteryPercentage != null)
-            scanNodeContainer.ScanNode.subText = batteryPercentage;
+        if (batteryPercentage != null) scanNodeContainer.scanNode.subText = batteryPercentage;
     }
 
     private static string? GetBatteryPercentage(GrabbableObject grabbableObject) {
-        if (grabbableObject == null || !grabbableObject.itemProperties.requiresBattery)
-            return null;
+        if (grabbableObject == null || !grabbableObject.itemProperties.requiresBattery) return null;
 
         var subText = grabbableObject.insertedBattery.empty
             ? "Battery: 0%"
-            : $"Battery: {(int)(grabbableObject.insertedBattery.charge * 100)}%";
+            : $"Battery: {(int) (grabbableObject.insertedBattery.charge * 100)}%";
 
         return subText;
     }
@@ -112,8 +97,8 @@ public static class GrabbableObjectPatch {
             layer = LayerMask.NameToLayer("ScanNode"),
             transform = {
                 localScale = Vector3.one * size,
-                parent = gameObject.transform
-            }
+                parent = gameObject.transform,
+            },
         };
 
         scanNodeObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -128,12 +113,11 @@ public static class GrabbableObjectPatch {
         scanNode.requiresLineOfSight = true;
         scanNode.headerText = headerText;
 
-        if (subText != null)
-            scanNode.subText = subText;
+        if (subText != null) scanNode.subText = subText;
 
         var scanNodeContainer = gameObject.AddComponent<ScanNodeContainer>();
 
         scanNodeContainer.scanNodeGameObject = scanNodeObject;
-        scanNodeContainer.ScanNode = scanNode;
+        scanNodeContainer.scanNode = scanNode;
     }
 }

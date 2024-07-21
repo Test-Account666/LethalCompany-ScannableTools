@@ -9,23 +9,21 @@ public class ScannableTools : BaseUnityPlugin {
     public static ScannableTools Instance { get; private set; } = null!;
     internal new static ManualLogSource Logger { get; private set; } = null!;
     internal static Harmony? Harmony { get; private set; }
-    internal static ScanToolsConfig scanToolsConfig { get; private set; } = null!;
+    internal static ScanToolsConfig ScanToolsConfig { get; private set; } = null!;
 
-    public static void AddScanNodeToGrabbableObject(GrabbableObject grabbableObject) {
+    public static void AddScanNodeToGrabbableObject(GrabbableObject grabbableObject) =>
         GrabbableObjectPatch.HandleGrabbableObject(grabbableObject);
-    }
 
-    public static void UpdateScanNodeOfGrabbableObject(GrabbableObject grabbableObject) {
+    public static void UpdateScanNodeOfGrabbableObject(GrabbableObject grabbableObject) =>
         GrabbableObjectPatch.UpdateGrabbableObject(grabbableObject);
-    }
 
     private void Awake() {
         Logger = base.Logger;
         Instance = this;
 
-        scanToolsConfig = new ScanToolsConfig(Config);
+        ScanToolsConfig = new(Config);
 
-        scanToolsConfig.HandleConfig();
+        ScanToolsConfig.HandleConfig();
 
         Patch();
 
@@ -33,7 +31,7 @@ public class ScannableTools : BaseUnityPlugin {
     }
 
     internal static void Patch() {
-        Harmony ??= new Harmony(MyPluginInfo.PLUGIN_GUID);
+        Harmony ??= new(MyPluginInfo.PLUGIN_GUID);
 
         Logger.LogDebug("Patching...");
 

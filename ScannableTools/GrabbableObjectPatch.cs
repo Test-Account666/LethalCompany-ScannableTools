@@ -25,9 +25,9 @@ public static class GrabbableObjectPatch {
 
         if (grabbableObject.itemProperties.isScrap) return;
 
-        var scanNodeContainer = grabbableObject.gameObject.GetComponent<ScanNodeContainer>();
+        var hasScanNodeContainer = grabbableObject.gameObject.TryGetComponent<ScanNodeContainer>(out var scanNodeContainer);
 
-        if (scanNodeContainer != null) return;
+        if (!hasScanNodeContainer) return;
 
         if (grabbableObject.isHeld) return;
 
@@ -37,8 +37,7 @@ public static class GrabbableObjectPatch {
             if (ScannableTools.ScanToolsConfig.blacklistedItemsRegex.IsMatch(grabbableObject.itemProperties.itemName))
                 return;
 
-        if (grabbableObject.itemProperties.itemName.Equals("Key") &&
-            ScannableTools.ScanToolsConfig.keyScanNodeType.Value == 0) {
+        if (grabbableObject.itemProperties.itemName.Equals("Key") && ScannableTools.ScanToolsConfig.keyScanNodeType.Value == 0) {
             var scanNode = grabbableObject.gameObject.GetComponentInChildren<ScanNodeProperties>();
             if (scanNode != null) {
                 scanNodeContainer = grabbableObject.gameObject.AddComponent<ScanNodeContainer>();
@@ -48,8 +47,7 @@ public static class GrabbableObjectPatch {
             }
         }
 
-        CreateScanNodeOnObject(grabbableObject.gameObject, grabbableObject.itemProperties.itemName,
-                               GetBatteryPercentage(grabbableObject));
+        CreateScanNodeOnObject(grabbableObject.gameObject, grabbableObject.itemProperties.itemName, GetBatteryPercentage(grabbableObject));
     }
 
     internal static void UpdateGrabbableObject(GrabbableObject grabbableObject) {

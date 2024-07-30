@@ -1,5 +1,9 @@
 # ScannableTools Mod
 
+## 1.1.2<br>
+
+\* Fix mod (Sorry about that...)<br>
+
 ## 1.1.1<br>
 
 \+ Added clipboard to default blacklist<br>

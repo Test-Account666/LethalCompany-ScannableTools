@@ -27,7 +27,7 @@ public static class GrabbableObjectPatch {
 
         var hasScanNodeContainer = grabbableObject.gameObject.TryGetComponent<ScanNodeContainer>(out var scanNodeContainer);
 
-        if (!hasScanNodeContainer) return;
+        if (hasScanNodeContainer) return;
 
         if (grabbableObject.isHeld) return;
 
@@ -55,9 +55,9 @@ public static class GrabbableObjectPatch {
 
         if (grabbableObject.itemProperties.isScrap) return;
 
-        var scanNodeContainer = grabbableObject.gameObject.GetComponent<ScanNodeContainer>();
+        var hasScanNodeContainer = grabbableObject.gameObject.TryGetComponent<ScanNodeContainer>(out var scanNodeContainer);
 
-        if (scanNodeContainer == null || scanNodeContainer.scanNode == null) {
+        if (!hasScanNodeContainer || scanNodeContainer.scanNode == null) {
             if (!grabbableObject.isHeld) HandleGrabbableObject(grabbableObject);
             return;
         }

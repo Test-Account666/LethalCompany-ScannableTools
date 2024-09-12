@@ -1,5 +1,9 @@
 # ScannableTools Mod
 
+## 1.1.3<br>
+
+\* Maybe fix Cruiser going brrr?<br>
+
 ## 1.1.2<br>
 
 \* Fix mod (Sorry about that...)<br>

@@ -99,6 +99,9 @@ public static class GrabbableObjectPatch {
             },
         };
 
+        var boxCollider = scanNodeObject.GetComponent<BoxCollider>();
+        boxCollider.isTrigger = true;
+
         scanNodeObject.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
         var scanNode = scanNodeObject.GetComponent<ScanNodeProperties>();

@@ -1,5 +1,9 @@
 # ScannableTools Mod
 
+## 1.1.4<br>
+
+\* Fixed adding Scan Nodes to items that already have a Scan Node<br>
+
 ## 1.1.3<br>
 
 \* Maybe fix Cruiser going brrr?<br>

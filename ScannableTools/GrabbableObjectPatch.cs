@@ -37,8 +37,9 @@ public static class GrabbableObjectPatch {
             if (ScannableTools.ScanToolsConfig.blacklistedItemsRegex.IsMatch(grabbableObject.itemProperties.itemName))
                 return;
 
+        var scanNode = grabbableObject.gameObject.GetComponentInChildren<ScanNodeProperties>();
+
         if (grabbableObject.itemProperties.itemName.Equals("Key") && ScannableTools.ScanToolsConfig.keyScanNodeType.Value == 0) {
-            var scanNode = grabbableObject.gameObject.GetComponentInChildren<ScanNodeProperties>();
             if (scanNode != null) {
                 scanNodeContainer = grabbableObject.gameObject.AddComponent<ScanNodeContainer>();
                 scanNodeContainer.scanNodeGameObject = scanNode.gameObject;
@@ -46,6 +47,8 @@ public static class GrabbableObjectPatch {
                 return;
             }
         }
+
+        if (scanNode != null) return;
 
         CreateScanNodeOnObject(grabbableObject.gameObject, grabbableObject.itemProperties.itemName, GetBatteryPercentage(grabbableObject));
     }
@@ -78,9 +81,7 @@ public static class GrabbableObjectPatch {
     private static string? GetBatteryPercentage(GrabbableObject grabbableObject) {
         if (grabbableObject == null || !grabbableObject.itemProperties.requiresBattery) return null;
 
-        var subText = grabbableObject.insertedBattery.empty
-            ? "Battery: 0%"
-            : $"Battery: {(int) (grabbableObject.insertedBattery.charge * 100)}%";
+        var subText = grabbableObject.insertedBattery.empty? "Battery: 0%" : $"Battery: {(int) (grabbableObject.insertedBattery.charge * 100)}%";
 
         return subText;
     }
